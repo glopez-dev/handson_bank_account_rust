@@ -12,9 +12,24 @@ impl BankAccount {
     }
 
     fn balance(&self) -> i64 {
-        self.initial_amount
+       let mut balance = self.initial_amount;
+
+       for transaction in &self.transactions {
+        balance += transaction.amount()
+       }
+
+       balance
     }
 
+    fn deposit(&mut self, amount: i64) {
+        let transaction = Transaction::Deposit { date: Utc::now(), amount: amount };
+        self.transactions.push(transaction);
+    }
+
+    fn with_draw(&mut self, amount: i64) {
+        let transaction = Transaction::Withdraw{ date: Utc::now(), amount: amount };
+        self.transactions.push(transaction);
+    }
 }
 
 pub enum Transaction {
