@@ -1,10 +1,36 @@
 use chrono::{DateTime, Utc};
 
 pub struct BankAccount {
+    account_number: String,
+    initial_amount: i64,
+    transactions: Vec<Transaction>,
+}
+
+impl BankAccount {
+    fn create_new_account(account_number: String, initial_amount: i64) -> BankAccount {
+        BankAccount {account_number: account_number, initial_amount: initial_amount, transactions: Vec::new()}
+    }
+
+    fn balance(&self) -> i64 {
+        self.initial_amount
+    }
+
 }
 
 pub enum Transaction {
+    Deposit { date: DateTime<Utc>, amount: i64 },
+    Withdraw { date: DateTime<Utc>, amount: i64 },
 }
+
+impl Transaction {
+    fn amount(&self) -> i64 {
+        match self {
+            &Transaction::Deposit {amount, ..} => amount,
+            &Transaction::Withdraw {amount, ..} => -amount,
+        }
+    }
+}
+
 
 #[allow(unused_imports)]
 #[cfg(test)]
